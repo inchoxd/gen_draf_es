@@ -25,11 +25,16 @@ do
         header1=`gsed -n '11p' $file`
         draft_line=`gsed -n '/## draft/=' $file`
         draft=`gsed -n "$((${draft_line}+1))p" $file`
+        rel=`gsed -n "$((${draft_line}+3))p" $file`
+        if [ -n "$rel" ]
+        then
+            draft="${draft}\n\n${rel}"
+        fi
         gsed -i -e \$a"${header1}"\\n"${draft}"\\n ${dir}/es_draft.md
     else
         continue
     fi
 done
 
-# pandoc -F pandoc-crossref es_draft.md -o es_draft.pdf --pdf-engine=lualatex -V documentclass=ltjarticle -N -V geometry:a4paper -V geometry:margin=2.5cm
+pandoc -F pandoc-crossref es_draft.md -o es_draft.pdf --pdf-engine=lualatex -V documentclass=ltjarticle -N -V geometry:a4paper -V geometry:margin=2.5cm
 
