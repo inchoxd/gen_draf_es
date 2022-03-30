@@ -3,14 +3,20 @@ emulate -R sh
 
 dir=`pwd`
 
-if `find $pwd/about.md >>&1` && true
+if find $dir/about.md > /dev/null 2>&1
 then
-    `cat $pwd/about.md >> $pwd/es_draft.md`
+    cat $dir/about.md >> $dir/es_draft.md
 fi
 
-files=`find $dir/* -maxdepth 0 -type f -name '*.md'`
+files=`find $dir/* -type f -name '*.md'`
 
 for file in $files;
 do
-    echo $file
+    if ! find $dir/es_draft.md > /dev/null 2>&1
+    then
+        sh_pwd=`where gen.sh`
+        tmplt=${sh_pwd%/gen.sh}
+        echo $tmplt
+        cat $tmplt/template.md > $dir/es_draft.md
+    fi
 done
