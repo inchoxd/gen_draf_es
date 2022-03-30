@@ -16,7 +16,14 @@ do
     then
         sh_pwd=`where gen.sh`
         tmplt=${sh_pwd%/gen.sh}
-        echo $tmplt
         cat $tmplt/template.md > $dir/es_draft.md
+    else
+    fi
+    f_name=`basename $file`
+    if [ $f_name != 'about.md' ] && [ $f_name != 'es_draft.md' ]
+    then
+        continue
+    else
+        continue
     fi
 done
