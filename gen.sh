@@ -23,13 +23,21 @@ do
     if [ $f_name != 'about.md' ] && [ $f_name != 'es_draft.md' ]
     then
         header1=`gsed -n '11p' $file`
-        draft_line=`gsed -n '/## draft/=' $file`
-        draft=`gsed -n "$((${draft_line}+1))p" $file`
-        rel=`gsed -n "$((${draft_line}+3))p" $file`
-        if [ -n "$rel" ]
-        then
-            draft="${draft}\n\n${rel}"
-        fi
+        draft_ttl=`gsed -n '/## draft/=' $file`
+        draft_line=$((${draft_ttl}+1))
+        draft=`gsed -n "${draft_line}p" $file`
+        img_line=$((${draft_line}+2))
+        while :
+        do
+            img=`gsed -n "${img_line}p" $file`
+            if [ -n "$img" ]
+            then
+                draft="${draft}\n\n${img}"
+            else
+                break
+            fi
+            img_line=$((${img_line}+2))
+        done
         gsed -i -e \$a"${header1}"\\n"${draft}"\\n ${dir}/es_draft.md
     else
         continue
