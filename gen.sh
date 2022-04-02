@@ -2,6 +2,10 @@
 emulate -R sh
 
 dir=`pwd`
+if find $dir/es_draft.md > /dev/null 2>&1
+then
+    rm es_draft.md
+fi
 
 if find $dir/about.md > /dev/null 2>&1
 then
